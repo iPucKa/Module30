@@ -14,7 +14,7 @@ namespace Wallet
 			_items = items;
 		}
 
-		public Dictionary<TKey, TValue> Objects => _items;
+		public IReadOnlyDictionary<TKey, TValue> Objects => _items;		
 
 		public void Add(TKey key, TValue value)
 		{
@@ -26,6 +26,6 @@ namespace Wallet
 		{
 			_items[key] = value;
 			ValueChanged?.Invoke(key, value);
-		}
+		}		
 	}
 }
