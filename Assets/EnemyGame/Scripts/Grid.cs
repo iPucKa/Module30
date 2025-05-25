@@ -8,10 +8,7 @@ public class Grid
     public void Bind(IGridObject gridObject, Vector2Int coordinates)
     {
 		if (_objects.ContainsKey(coordinates))
-		{
-			Debug.LogError("Объект с данными координатами уже забинден");
-			return;
-		}
+			return;	
 
 		gridObject.BindTo(new Vector3(coordinates.x, 0, coordinates.y));
 		_objects.Add(coordinates, gridObject);

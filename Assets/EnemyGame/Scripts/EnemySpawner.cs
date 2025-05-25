@@ -11,13 +11,17 @@ public class EnemySpawner : MonoBehaviour
 	[SerializeField] private ElfSettings[] _elfSettings;
 	[SerializeField] private DragonSettings[] _dragonSettings;
 
-	private const int SpawnRange = 4;
+	private const int MaxEnemies = 3;
+	private int _spawnRange = 5;
 
 	private List<Enemy> _enemies = new List<Enemy>();
 	private Grid _grid;
 
 	private void Awake()
 	{
+		if(_spawnRange < MaxEnemies - 1)
+			_spawnRange = MaxEnemies - 1;
+
 		_grid = new Grid();
 
 		CreateEnemy();
@@ -27,11 +31,11 @@ public class EnemySpawner : MonoBehaviour
 
 	private void CreateEnemy()
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < MaxEnemies; i++)
 		{
-			Enemy ork = Instantiate(_orkPrefab);
-			Enemy elf = Instantiate(_elfPrefab);
-			Enemy dragon = Instantiate(_dragonPrefab);
+			Enemy ork = Instantiate(_orkPrefab, transform);
+			Enemy elf = Instantiate(_elfPrefab, transform);
+			Enemy dragon = Instantiate(_dragonPrefab, transform);
 
 			_enemies.Add(ork);
 			_enemies.Add(elf);
@@ -73,8 +77,8 @@ public class EnemySpawner : MonoBehaviour
 		{
 			while(enemy.IsBinded == false)
 			{
-				int xPosition = Random.Range(-SpawnRange, SpawnRange);
-				int zPosition = Random.Range(-SpawnRange, SpawnRange);
+				int xPosition = Random.Range(0, _spawnRange);
+				int zPosition = Random.Range(0, _spawnRange);
 
 				Vector2Int coordinate = new Vector2Int(xPosition, zPosition);
 
