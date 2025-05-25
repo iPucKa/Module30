@@ -1,48 +1,52 @@
 using UnityEngine;
 
-public class TimerHandler : MonoBehaviour
+namespace Timer
 {
-	[SerializeField] private TimerSliderView _timerSliderView;
-	[SerializeField] private TimerHeartsView _timerHeartsView;
-	[SerializeField] private UIView _uIView;
-
-	[SerializeField] private float _maxTime;
-
-	private Timer _timer;	
-
-	private void Awake()
+	public class TimerHandler : MonoBehaviour
 	{
-		_timer = new Timer(this, _maxTime);
+		[SerializeField] private SliderView _timerSliderView;
+		[SerializeField] private TimerHeartsView _timerHeartsView;
+		[SerializeField] private UIView _uIView;
 
-		_timerSliderView.Initialize(_timer);
-		_timerHeartsView.Initialize(_timer);
-		_uIView.Initialize(_timer);
-	}
+		[SerializeField] private float _maxTime;
 
-	public void StartTimer()
-	{
-		if (_timer.InProcess == false)
+		private Timer _timer;
+
+		private void Awake()
 		{
-			_timer.SetPause(false);
-			_timer.Setup(_maxTime);
-			_timer.StartCountingTime();
+			_timer = new Timer(this, 0, _maxTime);
+
+			_timerSliderView.Initialize(_timer.Current, _timer.Max);
+			_timerHeartsView.Initialize(_timer, _timer.Current, _timer.Max);
+			
+			_uIView.Initialize(_timer);
 		}
 
-		else
+		public void StartTimer()
 		{
-			_timer.StopCountineTime();
-			_timer.Setup(0);
-		}
-	}
-
-	public void PauseHandle()
-	{
-		if (_timer.InProcess)
-		{
-			if (_timer.IsPaused)
+			if (_timer.InProcess == false)
+			{
 				_timer.SetPause(false);
+				_timer.Setup(_maxTime);
+				_timer.StartCountingTime();
+			}
+
 			else
-				_timer.SetPause(true);
+			{
+				_timer.StopCountineTime();
+				_timer.Setup(0);
+			}
+		}
+
+		public void PauseHandle()
+		{
+			if (_timer.InProcess)
+			{
+				if (_timer.IsPaused)
+					_timer.SetPause(false);
+				else
+					_timer.SetPause(true);
+			}
 		}
 	}
 }

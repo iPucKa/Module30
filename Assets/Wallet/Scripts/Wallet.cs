@@ -1,40 +1,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wallet
+namespace Wallet
 {
-	private ReactiveVariable<ItemsType, int> _currentAmount;
-	private ReactiveVariable<ItemsType, int> _maxAmount;
-
-	private Dictionary<ItemsType, int> _items;
-
-	public Wallet(Dictionary<ItemsType, int> items, int currentAmount, int maxAmount)
+	public class Wallet
 	{
-		_currentAmount = new ReactiveVariable<ItemsType, int>(currentAmount);
-		_maxAmount = new ReactiveVariable<ItemsType, int>(maxAmount);
-		
-		_items = items;
-	}
+		private ReactiveVariable<ItemsType, int> _currentAmount;
+		private ReactiveVariable<ItemsType, int> _maxAmount;
 
-	public ReactiveVariable<ItemsType, int> CurrentAmount => _currentAmount;
+		private Dictionary<ItemsType, int> _items;
 
-	public void Add(ItemsType type, int valueToAdd)
-	{
-		if (_items.ContainsKey(type) == false)
-			return;
+		public Wallet(Dictionary<ItemsType, int> items, int currentAmount, int maxAmount)
+		{
+			_currentAmount = new ReactiveVariable<ItemsType, int>(currentAmount);
+			_maxAmount = new ReactiveVariable<ItemsType, int>(maxAmount);
 
-		_currentAmount.SetValue(type, Mathf.Clamp(_items[type] + valueToAdd, 0, _maxAmount.Value));
-		
-		_items[type] = _currentAmount.Value;
-	}
+			_items = items;
+		}
 
-	public void Remove(ItemsType type, int valueToRemove)
-	{
-		if (_items.ContainsKey(type) == false)
-			return;
+		public ReactiveVariable<ItemsType, int> CurrentAmount => _currentAmount;
 
-		_currentAmount.SetValue(type, Mathf.Clamp(_items[type] - valueToRemove, 0, _maxAmount.Value));
+		public void Add(ItemsType type, int valueToAdd)
+		{
+			if (_items.ContainsKey(type) == false)
+				return;
 
-		_items[type] = _currentAmount.Value;
+			_currentAmount.SetValue(type, Mathf.Clamp(_items[type] + valueToAdd, 0, _maxAmount.Value));
+
+			_items[type] = _currentAmount.Value;
+		}
+
+		public void Remove(ItemsType type, int valueToRemove)
+		{
+			if (_items.ContainsKey(type) == false)
+				return;
+
+			_currentAmount.SetValue(type, Mathf.Clamp(_items[type] - valueToRemove, 0, _maxAmount.Value));
+
+			_items[type] = _currentAmount.Value;
+		}
 	}
 }

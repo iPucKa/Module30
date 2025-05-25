@@ -1,6 +1,9 @@
-public enum ItemsType
+namespace Wallet
 {
-    Coins,
-    Diamonds,
-    Energie
+	public enum ItemsType
+	{
+		Coins,
+		Diamonds,
+		Energie
+	}
 }

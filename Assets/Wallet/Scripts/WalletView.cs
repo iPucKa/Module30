@@ -1,40 +1,43 @@
 using TMPro;
 using UnityEngine;
 
-public class WalletView : MonoBehaviour
+namespace Wallet
 {
-	[SerializeField] private TMP_Text _coinsCountText;
-	[SerializeField] private TMP_Text _diamondsCountText;
-	[SerializeField] private TMP_Text _energieCountText;
-
-	private ReactiveVariable<ItemsType, int> _currentAmount;
-
-	public void Initialize(ReactiveVariable<ItemsType,int> currentAmount)
+	public class WalletView : MonoBehaviour
 	{
-		_currentAmount = currentAmount;
+		[SerializeField] private TMP_Text _coinsCountText;
+		[SerializeField] private TMP_Text _diamondsCountText;
+		[SerializeField] private TMP_Text _energieCountText;
 
-		_currentAmount.Changed += OnValueChanged;
-	}	
+		private ReactiveVariable<ItemsType, int> _currentAmount;
 
-	private void OnDestroy()
-	{
-		_currentAmount.Changed -= OnValueChanged;
-	}	
+		public void Initialize(ReactiveVariable<ItemsType, int> currentAmount)
+		{
+			_currentAmount = currentAmount;
 
-	private void OnValueChanged(ItemsType type, int value)
-	{
-		if(type == ItemsType.Coins)
-			UpdateValue(_coinsCountText, value);
+			_currentAmount.Changed += OnValueChanged;
+		}
 
-		if (type == ItemsType.Diamonds)
-			UpdateValue(_diamondsCountText, value);
+		private void OnDestroy()
+		{
+			_currentAmount.Changed -= OnValueChanged;
+		}
 
-		if (type == ItemsType.Energie)
-			UpdateValue(_energieCountText, value);
-	}
+		private void OnValueChanged(ItemsType type, int value)
+		{
+			if (type == ItemsType.Coins)
+				UpdateValue(_coinsCountText, value);
 
-	private void UpdateValue(TMP_Text text, int value)
-	{
-		text.text = value.ToString();
+			if (type == ItemsType.Diamonds)
+				UpdateValue(_diamondsCountText, value);
+
+			if (type == ItemsType.Energie)
+				UpdateValue(_energieCountText, value);
+		}
+
+		private void UpdateValue(TMP_Text text, int value)
+		{
+			text.text = value.ToString();
+		}
 	}
 }
