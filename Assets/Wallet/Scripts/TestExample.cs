@@ -14,14 +14,15 @@ namespace Wallet
 
 		private void Awake()
 		{
-			_items = new Dictionary<ItemsType, int>(){
-			{ItemsType.Coins, 0},
-			{ItemsType.Diamonds, 0},
-			{ItemsType.Energie, 0},
-		};
+			_items = new Dictionary<ItemsType, int>()
+			{
+				{ItemsType.Coins, 0},
+				{ItemsType.Diamonds, 0},
+				{ItemsType.Energie, 0},
+			};
 
-			_wallet = new Wallet(_items, 0, MaxAmount);
-			_walletView.Initialize(_wallet.CurrentAmount);
+			_wallet = new Wallet(_items, MaxAmount);
+			_walletView.Initialize(_wallet.WalletItems);
 		}
 
 		private void Update()

@@ -5,39 +5,36 @@ namespace Wallet
 {
 	public class Wallet
 	{
-		private ReactiveVariable<ItemsType, int> _currentAmount;
-		private ReactiveVariable<ItemsType, int> _maxAmount;
+		private ReactiveDictionary<ItemsType, int> _items;
 
-		private Dictionary<ItemsType, int> _items;
+		private int _maxAmount;
 
-		public Wallet(Dictionary<ItemsType, int> items, int currentAmount, int maxAmount)
+		public Wallet(Dictionary<ItemsType, int> items, int maxAmount)
 		{
-			_currentAmount = new ReactiveVariable<ItemsType, int>(currentAmount);
-			_maxAmount = new ReactiveVariable<ItemsType, int>(maxAmount);
-
-			_items = items;
+			_maxAmount = maxAmount;
+			_items = new ReactiveDictionary<ItemsType, int>(items);			
 		}
-
-		public ReactiveVariable<ItemsType, int> CurrentAmount => _currentAmount;
+		
+		public ReactiveDictionary<ItemsType, int> WalletItems => _items;
 
 		public void Add(ItemsType type, int valueToAdd)
 		{
-			if (_items.ContainsKey(type) == false)
-				return;
+			if (_items.Objects.ContainsKey(type) == false)
+				return;	
 
-			_currentAmount.SetValue(type, Mathf.Clamp(_items[type] + valueToAdd, 0, _maxAmount.Value));
+			int newValue = Mathf.Clamp(_items.Objects[type] + valueToAdd, 0, _maxAmount);
 
-			_items[type] = _currentAmount.Value;
+			_items.Add(type, newValue);
 		}
 
 		public void Remove(ItemsType type, int valueToRemove)
 		{
-			if (_items.ContainsKey(type) == false)
+			if (_items.Objects.ContainsKey(type) == false)
 				return;
 
-			_currentAmount.SetValue(type, Mathf.Clamp(_items[type] - valueToRemove, 0, _maxAmount.Value));
+			int newValue = Mathf.Clamp(_items.Objects[type] - valueToRemove, 0, _maxAmount);
 
-			_items[type] = _currentAmount.Value;
+			_items.Remove(type, newValue);
 		}
 	}
 }

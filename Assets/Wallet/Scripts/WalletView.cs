@@ -9,35 +9,37 @@ namespace Wallet
 		[SerializeField] private TMP_Text _diamondsCountText;
 		[SerializeField] private TMP_Text _energieCountText;
 
-		private ReactiveVariable<ItemsType, int> _currentAmount;
+		private ReactiveDictionary<ItemsType, int> _items;
 
-		public void Initialize(ReactiveVariable<ItemsType, int> currentAmount)
+		public void Initialize(ReactiveDictionary<ItemsType, int> items)
 		{
-			_currentAmount = currentAmount;
-
-			_currentAmount.Changed += OnValueChanged;
+			_items = items;
+			_items.ValueChanged += OnValueChanged;
 		}
 
 		private void OnDestroy()
 		{
-			_currentAmount.Changed -= OnValueChanged;
+			_items.ValueChanged -= OnValueChanged;
 		}
 
 		private void OnValueChanged(ItemsType type, int value)
 		{
-			if (type == ItemsType.Coins)
-				UpdateValue(_coinsCountText, value);
-
-			if (type == ItemsType.Diamonds)
-				UpdateValue(_diamondsCountText, value);
-
-			if (type == ItemsType.Energie)
-				UpdateValue(_energieCountText, value);
+			switch (type)
+			{
+				case ItemsType.Coins:
+					UpdateValue(_coinsCountText, value);
+					break;
+				case ItemsType.Diamonds:
+					UpdateValue(_diamondsCountText, value);
+					break;
+				case ItemsType.Energie:
+					UpdateValue(_energieCountText, value);
+					break;
+				default:
+					break;
+			}
 		}
 
-		private void UpdateValue(TMP_Text text, int value)
-		{
-			text.text = value.ToString();
-		}
+		private void UpdateValue(TMP_Text text, int value) => text.text = value.ToString();		
 	}
 }
