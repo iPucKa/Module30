@@ -4,8 +4,8 @@ namespace Timer
 {
 	public class TimerHandler : MonoBehaviour
 	{
-		[SerializeField] private SliderView _timerSliderView;
-		[SerializeField] private HeartsView _timerHeartsView;
+		[SerializeField] private SliderView _sliderView;
+		[SerializeField] private HeartsView _heartsView;
 		[SerializeField] private UIView _uIView;
 
 		[SerializeField] private float _maxTime;
@@ -16,8 +16,8 @@ namespace Timer
 		{
 			_timer = new Timer(this, 0, _maxTime);
 
-			_timerSliderView.Initialize(_timer.Current, _timer.Max);
-			_timerHeartsView.Initialize(_timer.Current, _timer.Max);
+			_sliderView.Initialize(_timer.Current, _timer.Max);
+			_heartsView.Initialize(_timer.Current, _timer.Max);
 			
 			_uIView.Initialize(_timer);
 		}

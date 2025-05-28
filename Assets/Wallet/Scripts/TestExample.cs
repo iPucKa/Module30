@@ -6,23 +6,28 @@ namespace Wallet
 	public class TestExample : MonoBehaviour
 	{
 		[SerializeField] private WalletView _walletView;
+		[SerializeField] private List<CurrencyView> _currencyViews;
 
 		private const int MaxAmount = 100;
 
 		private Wallet _wallet;
-		private Dictionary<ItemsType, int> _items;
+		private Dictionary<ItemsType, ReactiveVariable<int>> _items;
 
 		private void Awake()
 		{
-			_items = new Dictionary<ItemsType, int>()
+			_items = new Dictionary<ItemsType, ReactiveVariable<int>>()
 			{
-				{ItemsType.Coins, 0},
-				{ItemsType.Diamonds, 0},
-				{ItemsType.Energie, 0},
+				{ItemsType.Coins, new ReactiveVariable<int>(0)},
+				{ItemsType.Diamonds, new ReactiveVariable<int>(0)},
+				{ItemsType.Energie, new ReactiveVariable<int>(0)},
 			};
 
 			_wallet = new Wallet(_items, MaxAmount);
-			_walletView.Initialize(_wallet.WalletItems);
+
+			//_walletView.Initialize(_wallet.WalletItems);
+			
+			foreach (CurrencyView view in _currencyViews)
+				view.Initialize(_wallet.Items);
 		}
 
 		private void Update()
