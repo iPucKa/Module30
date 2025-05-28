@@ -3,27 +3,24 @@ using UnityEngine;
 
 namespace Timer
 {
-	public class TimerHeartsView : MonoBehaviour
+	public class HeartsView : MonoBehaviour
 	{
 		[SerializeField] private GameObject _heartSpritePrefab;
 		[SerializeField] private Transform _parentForHearts;
 
+		private const float Second = 1;
+
 		private IReadOnlyVariable<float> _currentValue;
 		private IReadOnlyVariable<float> _maxValue;
 
-		private Timer _timer;
 		private List<GameObject> _hearts;
 
-		public void Initialize(Timer timer, IReadOnlyVariable<float> currentValue, IReadOnlyVariable<float> maxValue)
+		public void Initialize(IReadOnlyVariable<float> currentValue, IReadOnlyVariable<float> maxValue)
 		{
-			_timer = timer;
-
 			_currentValue = currentValue;
 			_maxValue = maxValue;
 
 			_currentValue.ValueChanged += OnCurrentChanged;
-			_timer.Started += OnTimerStarted;
-			_timer.Stoped += OnTimerStoped;
 
 			_hearts = new List<GameObject>();
 		}
@@ -31,17 +28,17 @@ namespace Timer
 		private void OnDestroy()
 		{
 			_currentValue.ValueChanged -= OnCurrentChanged;
-			_timer.Started -= OnTimerStarted;
-			_timer.Stoped -= OnTimerStoped;
 		}
-
-		private void OnTimerStarted() => CreateHearts();
-
-		private void OnTimerStoped() => DestroyHearts();
 
 		private void OnCurrentChanged(float value)
 		{
-			if (_hearts.Count - value >= 1)
+			if (value == 0)			
+				DestroyHearts();			
+
+			else if (value == _maxValue.Value)			
+				CreateHearts();	
+
+			else if (_hearts.Count - value >= Second)
 				for (int i = 0; i < _hearts.Count; i++)
 				{
 					if (i == _hearts.Count - 1)
