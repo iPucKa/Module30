@@ -357,8 +357,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4021294d77621aa4f8bfb0b0c9e157f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timerSliderView: {fileID: 1957869050}
-  _timerHeartsView: {fileID: 677350033}
+  _sliderView: {fileID: 1957869050}
+  _heartsView: {fileID: 677350033}
   _uIView: {fileID: 356870153}
   _maxTime: 20
 --- !u!4 &344952853
