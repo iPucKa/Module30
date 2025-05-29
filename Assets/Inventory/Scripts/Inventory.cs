@@ -6,23 +6,23 @@ namespace Inventory
 {
 	public class Inventory
 	{
-		private Dictionary<int, Item> _inventoryItems;
+		private Dictionary<Item, int> _inventoryItems;
 
 		private int _maxSize;
 
-		public Inventory(Dictionary<int, Item> inventoryItems, int maxSize)
+		public Inventory(Dictionary<Item, int> inventoryItems, int maxSize)
 		{
 			_inventoryItems = inventoryItems;
 			_maxSize = maxSize;
 		}
 
-		public int CurrentSize => _inventoryItems.Sum(id => id.Value.Count);
+		public int CurrentSize => _inventoryItems.Sum(item => item.Value);
 
 		public void Update(float deltaTime)
 		{
-			foreach (KeyValuePair<int, Item> item in _inventoryItems)
+			foreach (KeyValuePair<Item, int> item in _inventoryItems)
 			{
-				if (item.Value.Count == 0)
+				if (item.Value == 0)
 				{
 					_inventoryItems.Remove(item.Key);
 					break;
@@ -30,58 +30,52 @@ namespace Inventory
 			}
 		}
 
-		public void Add(Item item)
+		public void Add(Item item, int valueToAdd)
 		{
-			if (CurrentSize + item.Count > _maxSize)
+			if (CurrentSize + _inventoryItems[item] > _maxSize)
 				return;
 
-			int id = item.ID;
-
-			if (_inventoryItems.ContainsKey(id) == false)
+			if (_inventoryItems.ContainsKey(item) == false)
 			{
-				_inventoryItems.Add(id, item);
+				_inventoryItems.Add(item, valueToAdd);
 				return;
 			}
 
-			Item itemInInventory = _inventoryItems[id];
-
-			int newCount = itemInInventory.Count + item.Count;
-
-			itemInInventory.SetCount(newCount);
+			_inventoryItems[item] += valueToAdd;	
 		}
 
 
-		public Item GetItemsBy(int id, int count)
+		public Item GetItemsBy(int id, int count, out int removeItemCount)
 		{
-			foreach (KeyValuePair<int, Item> item in _inventoryItems)
-			{
-				if (item.Key == id)
-				{
-					Item itemInInventory = _inventoryItems[id];
-					Item removedItem = _inventoryItems[id];
+			removeItemCount = 0;
 
-					if (count > itemInInventory.Count)
+			foreach (KeyValuePair<Item, int> item in _inventoryItems)
+			{
+				if (item.Key.ID == id)
+				{					
+					if (count > _inventoryItems[item.Key])
 					{
 						Debug.Log("В инвентаре недостаточно предметов");
+						removeItemCount = 0;
 						return null;
 					}
 
-					int newCount = itemInInventory.Count - count;
+					_inventoryItems[item.Key] -= count;
 
-					itemInInventory.SetCount(newCount);
-					removedItem.SetCount(count);
-
-					return removedItem;
+					removeItemCount = count;
+					return item.Key;
 				}
 			}
 
 			return null;
 		}
 
-		public int GetItemCountBy(int id)
+		public int GetCountBy(int id)
 		{
-			if (_inventoryItems.ContainsKey(id))
-				return _inventoryItems[id].Count;
+			foreach (KeyValuePair<Item, int> item in _inventoryItems)
+			
+				if (item.Key.ID == id)				
+					return _inventoryItems[item.Key];					
 
 			return default(int);
 		}		
