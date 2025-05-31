@@ -6,7 +6,6 @@ namespace Wallet
 	public class TestExample : MonoBehaviour
 	{
 		[SerializeField] private WalletView _walletView;
-		[SerializeField] private List<CurrencyView> _currencyViews;
 
 		private const int MaxAmount = 100;
 
@@ -24,10 +23,7 @@ namespace Wallet
 
 			_wallet = new Wallet(_items, MaxAmount);
 
-			//_walletView.Initialize(_wallet.WalletItems);
-			
-			foreach (CurrencyView view in _currencyViews)
-				view.Initialize(_wallet.Items);
+			_walletView.Initialize(_wallet);
 		}
 
 		private void Update()

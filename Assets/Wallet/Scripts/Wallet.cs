@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,15 +16,15 @@ namespace Wallet
 			_items = items;
 		}
 
-		public IReadOnlyDictionary<ItemsType, ReactiveVariable<int>> Items => _items;
+		public IEnumerable<ReactiveVariable<int>> Values => _items.Values;
 
 		public void Add(ItemsType type, int valueToAdd)
 		{
 			if (_items.ContainsKey(type) == false)
-				return;	
+				return;
 
 			int newValue = Mathf.Clamp(_items[type].Value + valueToAdd, 0, _maxAmount);
-			
+
 			_items[type].Value = newValue;
 		}
 
