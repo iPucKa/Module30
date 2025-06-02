@@ -1,26 +1,28 @@
-using System;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Wallet
 {
-	public class CurrencyView : IDisposable
+	public class CurrencyView : MonoBehaviour
 	{
-		private TMP_Text _text;
+		[SerializeField] private TMP_Text _text;
+		[SerializeField] private Image _currencyImage;
 
 		private ReactiveVariable<int> _value;
 
-		public CurrencyView(ReactiveVariable<int> value, TMP_Text text)
+		public void Initialize(ReactiveVariable<int> value, Sprite currencySprite)
 		{
 			_value = value;
-			_text = text;
-			
+			_currencyImage.sprite = currencySprite;
+
 			_value.ValueChanged += OnValueChanged;
 		}
 
-		public void Dispose()
+		private void OnDestroy()
 		{
 			_value.ValueChanged -= OnValueChanged;
-		}		
+		}
 
 		private void OnValueChanged(int value)
 		{

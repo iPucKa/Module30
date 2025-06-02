@@ -1,15 +1,16 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 namespace Wallet
 {
 	public class WalletView : MonoBehaviour
 	{
-		[SerializeField] private List<TMP_Text> _texts;
+		[SerializeField] private CurrencyView _currencyViewPrefab;
+		[SerializeField] private Transform _spawnPlace;
+
+		[SerializeField] private List<Sprite> _currencySprites;
 
 		private Wallet _wallet;
-		private CurrencyView _view;
 
 		public void Initialize(Wallet wallet)
 		{
@@ -24,14 +25,11 @@ namespace Wallet
 
 			foreach (ReactiveVariable<int> value in _wallet.Values)
 			{
-				_view = new(value, _texts[index]);
+				CurrencyView currencyView = Instantiate(_currencyViewPrefab, _spawnPlace, false);
+				currencyView.Initialize(value, _currencySprites[index]);
+
 				index++;
 			}
-		}
-
-		private void OnDestroy()
-		{
-			_view.Dispose();
 		}
 	}
 }
